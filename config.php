@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-//Paul du Long
+//Paul du Long - cool
 
 /*
 |--------------------------------------------------------------------------
