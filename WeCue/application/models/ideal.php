@@ -39,7 +39,7 @@
             }
             
             $values = explode('|', $values[1]);
-            print_r($values);
+            //print_r($values);
             
             $user = $this -> session -> userdata('user_id');
             if( !$this ->store_trx_id($user, $values[0]))
