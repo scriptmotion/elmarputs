@@ -4,7 +4,11 @@
         function __construct() 
         {
             parent::__construct();
-            $this -> user -> access(10);
+            if( !$this -> user -> access(10) )
+            {
+                $this -> log -> add_message('Om te kunnen betalen moet u ingelogd zijn!');
+                redirect(base_url('index.php/login'));
+            }
         }
         
         function index( $send = false )
