@@ -23,7 +23,7 @@
         </div>
         
         <div>
-            <a href="admin/logout">Log uit</a>
+            <a href="<?php echo base_url('index.php/admin/logout')?>">Log uit</a>
         </div>
     </body>
 </html>

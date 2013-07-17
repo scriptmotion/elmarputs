@@ -105,6 +105,42 @@
             return $result -> row();
         }
         
+        function get_all_categories()
+        {
+            $this -> db -> select('categories.category, trainers.name, trainers.email');
+            $this -> db -> from('categories');
+            //$this -> db -> group_by('categories.category');
+            $this -> db -> join('trainers', 'categories.id = trainers.category', 'left');
+            $result = $this -> db -> get();
+            
+            if( !$result -> num_rows() )
+            {
+                $this -> log -> add_message('Geen categorie&euml;n');
+                return false;
+            }
+            
+            $output = $result -> result_array();
+            print_r($output);
+            echo '<br /><br />';
+            for( $i = 0; $i < count($output); $i++ )
+            {
+                $output[$i] =   array
+                                (
+                                    'data'      => array
+                                        (
+                                            'category' => $output[$i]['category']
+                                        ),
+                                    'results'   => array
+                                        (
+                                            'name'  => $output[$i]['name'],
+                                            'email' => $output[$i]['email']
+                                        )
+                                );
+            }
+            
+            return $output;
+        }
+        
         function search( $data = array() )
         {
             if( empty($data['query']) )

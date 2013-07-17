@@ -57,7 +57,7 @@
                 'rtlo'          => 99323,
                 'trxid'         => $trx_id,
                 'once'          => 1,
-                'test'          => 0
+                'test'          => 1
             );
             
             $response = $this ->send_request($fields, $this -> check_url);
@@ -68,22 +68,10 @@
                 return false;
             }
             
+            // Update db --> set 'paid' field
+            $this ->set_paid($trx_id);
+            
             $this -> log -> add_message($response);
-            return true;
-        }
-        
-        function check_trx_id( $trx_id = false )
-        {
-            $user = $this -> session -> userdata('user_id');
-            $db_id = $this -> fetch_trx_id($user);
-            
-            if( $db_id != $trx_id )
-            {
-                $this -> log -> add_message('Transactie-id\'s komen niet overeen');
-                return false;
-            }
-            
-            $this -> log -> add_message('Transactie-id\'s komen overeen!', 'success');
             return true;
         }
         
@@ -106,6 +94,24 @@
         {
             $this -> db -> where('id', $user_id);
             $this -> db -> set('trx_id', $trx_id);
+            if( !$this -> db -> update('trainers') )
+            {
+                $this -> log -> add_message('Er is iets foutgegaan bij het updaten van de database');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        private function set_paid( $trx_id = false )
+        {
+            if( !$trx_id )
+            {
+                $this -> log -> add_message('Geen transactie-id meegegeven');
+                return false;
+            }
+            $this -> db -> where ('trx_id', $trx_id);
+            $this -> db -> set('paid', 1);
             if( !$this -> db -> update('trainers') )
             {
                 $this -> log -> add_message('Er is iets foutgegaan bij het updaten van de database');

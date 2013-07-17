@@ -27,7 +27,6 @@
         
         function paid()
         {
-            $this -> ideal -> check_trx_id($_GET['trxid']);
             $this -> ideal -> check_paid($_GET['trxid']);
             $this -> load -> view('choose_bank');
         }
